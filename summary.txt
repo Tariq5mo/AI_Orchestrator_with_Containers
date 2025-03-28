@@ -1,1 +1,0 @@
-{ "score": 0.02185792349726776, "positive_words": 16, "negative_words": 6, "classification": "positive" }

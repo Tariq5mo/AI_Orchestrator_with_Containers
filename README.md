@@ -40,9 +40,6 @@ ai_orchestrator/
 │   ├── orchestrator.py        # Container orchestration logic
 │   ├── llm_integration.py     # LLM decision engine
 │   └── templates/             # Web interface templates
-├── tests/                     # Test suite
-│   ├── run_tests.py           # Test runner script
-│   └── test_*.py              # Component tests
 ├── .env                       # Environment variables (API keys)
 ├── requirements.txt           # Python dependencies
 └── run.sh                     # Startup script
@@ -220,22 +217,6 @@ The system consists of three main components:
             │ Data Processing │  │ Result          │
             │ Containers      │  │ Formatting      │
             └─────────────────┘  └─────────────────┘
-```
-
-## 🧪 Testing
-
-Run the comprehensive test suite to verify all system components:
-
-```bash
-python tests/run_tests.py
-```
-
-Individual component tests can be run as follows:
-
-```bash
-python -m unittest tests/test_orchestrator.py
-python -m unittest tests/test_containers.py
-python -m unittest tests/test_llm_integration.py
 ```
 
 ## ⚠️ Troubleshooting

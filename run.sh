@@ -25,4 +25,4 @@ fi
 # Run the web application
 echo "Starting the web server..."
 cd orchestrator
-python app.py
+python3 app.py
