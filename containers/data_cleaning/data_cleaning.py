@@ -32,7 +32,7 @@ def clean_data(text):
 
     # Standardize quotation marks and apostrophes
     text = re.sub(r'["""]', '"', text)
-    text = re.sub(r'[''']', "'", text)
+    text = re.sub(r"[''']", "'", text)
 
     # Remove special characters but preserve sentence structure
     text = re.sub(r'[^\w\s\.\,\?\!\:\;\-\(\)\[\]\/\"\']', ' ', text)

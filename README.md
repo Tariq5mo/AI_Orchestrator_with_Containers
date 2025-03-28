@@ -25,255 +25,250 @@ AI Orchestrator combines the power of LLMs with containerized microservices to c
 - **🔀 Smart Orchestration:** Automatically executes containers in the optimal sequence based on request semantics
 - **💻 Dual Interfaces:** Access via intuitive web UI or powerful command-line interface
 - **⚠️ Resilient Fallback:** Rule-based container selection ensures operation even when LLM API is unavailable
-- **⚡ Performance Optimization:** Parallel execution of compatible tasks for improved throughput
-- **🔧 Extensible Architecture:** Easily add new containers to extend system capabilities
+- **⚡ Parallel Execution:** Support for running compatible tasks concurrently for improved performance
 
-## 🏗️ Project Structure
+## 🖥️ Project Structure
 
 ```
-├── containers/                  # Containerized processing services
-│   ├── data_cleaning/           # Text normalization service
-│   ├── sentiment_analysis/      # Sentiment analysis service
-│   └── text_summarization/      # Text summarization service
-├── orchestrator/                # Core orchestration logic
-│   ├── app.py                   # Flask web application
-│   ├── llm_integration.py       # LLM decision engine
-│   ├── orchestrator.py          # Container orchestration logic
-│   └── templates/               # Web interface templates
-├── tests/                       # Comprehensive test suite
-│   ├── run_tests.py             # Test runner
-│   └── test_*.py                # Component-specific tests
-├── .env                         # Environment variables (API keys)
-├── requirements.txt             # Python dependencies
-├── debug_orchestrator.py        # Debugging utility
-└── run.sh                       # Startup script
+ai_orchestrator/
+├── containers/                # Containerized microservices
+│   ├── data_cleaning/         # Text normalization service
+│   ├── sentiment_analysis/    # Sentiment analysis service
+│   └── text_summarization/    # Text summarization service
+├── orchestrator/              # Core orchestration logic
+│   ├── app.py                 # Flask web application
+│   ├── orchestrator.py        # Container orchestration logic
+│   ├── llm_integration.py     # LLM decision engine
+│   └── templates/             # Web interface templates
+├── tests/                     # Test suite
+│   ├── run_tests.py           # Test runner script
+│   └── test_*.py              # Component tests
+├── .env                       # Environment variables (API keys)
+├── requirements.txt           # Python dependencies
+└── run.sh                     # Startup script
 ```
 
-## 🧰 Containerized Services
-
-### 📝 Data Cleaning (`data-cleaning`)
-
-Prepares text for further processing by normalizing format and structure.
-
-- **Functions:**
-  - Removes special characters and punctuation
-  - Normalizes whitespace and line breaks
-  - Converts text to lowercase for consistency
-- **Input:** Raw text (string)
-- **Output:** Cleaned, normalized text (string)
-- **Use case:** Pre-processing step for other containers
-
-### 😊 Sentiment Analysis (`sentiment-analysis`)
-
-Evaluates the emotional tone and polarity of text content.
-
-- **Algorithm:** Word frequency analysis with sentiment lexicon
-- **Features:**
-  - Identifies positive and negative expressions
-  - Accounts for intensifiers and negations
-  - Calculates normalized sentiment score
-- **Input:** Text (raw or cleaned)
-- **Output:** JSON with sentiment score (-1 to 1) and classification
-- **Use case:** Customer feedback analysis, social media monitoring
-
-### 📄 Text Summarization (`text-summarization`)
-
-Creates concise summaries while preserving key information.
-
-- **Algorithm:** Extractive summarization based on sentence importance scoring
-- **Features:**
-  - Identifies and extracts the most informative sentences
-  - Uses term frequency for content importance evaluation
-  - Configurable summary length (specify number of sentences)
-- **Input:** Text (raw or cleaned)
-- **Output:** Summarized text
-- **Use case:** Document distillation, article summarization
-
-## 🚀 Getting Started
+## 🔧 Installation
 
 ### Prerequisites
 
-- **Docker:** Engine version 19.03 or higher
-- **Python:** 3.9 or higher with pip
-- **Groq API Key:** For LLM-based decision making ([Get a key here](https://console.groq.com/))
+- Python 3.9+
+- Docker and Docker Compose
+- Groq API key (for LLM integration)
 
-### Installation
+### Setup Instructions
 
-1. **Clone the repository:**
+1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/ai-orchestrator.git
-   cd ai-orchestrator
+   git clone https://github.com/yourusername/AI_Orchestrator_with_Containers.git
+   cd AI_Orchestrator_with_Containers
    ```
 
-2. **Set up virtual environment (recommended):**
+2. **Create and activate a virtual environment**
 
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install Python dependencies:**
+3. **Install dependencies**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure your API key:**
+4. **Configure environment variables**
 
    ```bash
    cp .env.example .env
-   # Edit .env and add: LLM_API_KEY=your_groq_api_key_here
+   # Edit .env file to add your Groq API key
+   # LLM_API_KEY=your_groq_api_key_here
    ```
 
-5. **Build and start the system:**
+5. **Build the Docker containers**
 
    ```bash
-   chmod +x run.sh
+   # Using the automated script
    ./run.sh
-   ```
 
-   **Or build containers individually:**
-
-   ```bash
+   # Or manually
    docker build -t ai-orchestrator/data-cleaning containers/data_cleaning/
    docker build -t ai-orchestrator/sentiment-analysis containers/sentiment_analysis/
    docker build -t ai-orchestrator/text-summarization containers/text_summarization/
    ```
 
-## 📊 Usage Examples
+## 🚀 Usage
 
-### 🌐 Web Interface
+### Web Interface
 
-Experience the most user-friendly way to interact with the AI Orchestrator.
-
-1. **Start the web server:**
+1. **Start the web server**
 
    ```bash
-   cd orchestrator
-   python app.py
+   python orchestrator/app.py
    ```
 
-2. **Open your browser:** Navigate to `http://localhost:5000`
+2. **Open your browser and navigate to**
 
-3. **Interact naturally:** Enter your request and provide input text
+   ```
+   http://localhost:5000
+   ```
 
-   ![Web Interface Example](https://img.shields.io/badge/Web-Interface-blue?style=for-the-badge)
+3. **Enter your natural language request in the input field and submit**
 
-### 💻 Command Line Interface
+### Command Line Interface
 
-Powerful options for automation and integration with other tools.
-
-#### Basic Text Processing
-
-```bash
-python orchestrator/orchestrator.py \
-  --request "Clean this text and analyze sentiment" \
-  --input-text "This is AMAZING! I love this product so much!!!"
-```
-
-#### Processing Files
+Process text directly:
 
 ```bash
-python orchestrator/orchestrator.py \
-  --request "Summarize this text" \
-  --input-file some_article.txt \
-  --output-file summary.txt
+python orchestrator/orchestrator.py --request "Clean this text and analyze sentiment" --input-text "This is AMAZING! I love this product so much!!!"
 ```
 
-#### Advanced Parameters
+Process from file and save to output file:
 
 ```bash
-# Specify summary length
-python orchestrator/orchestrator.py \
-  --request "Summarize this text to 2 sentences" \
-  --input-file long_article.txt \
-  --output-file summary.txt
-
-# Enable parallel processing
-python orchestrator/orchestrator.py \
-  --request "Clean this text" \
-  --input-text "Multiple samples to clean" \
-  --parallel
+python orchestrator/orchestrator.py --request "Summarize this text" --input-file some_article.txt --output-file summary.txt
 ```
 
-### 🗣️ Example Natural Language Requests
+Advanced usage with parameters:
 
-The system understands a wide range of natural language instructions:
+```bash
+# Summarize to a specific number of sentences
+python orchestrator/orchestrator.py --request "Summarize this text to 2 sentences" --input-file long_article.txt
 
-| Request Type | Example Phrases |
-|-------------|----------------|
-| **Text Cleaning** | "Clean this text" <br> "Remove special characters from this text" <br> "Normalize this content" |
-| **Sentiment Analysis** | "Analyze sentiment of this review" <br> "Is this feedback positive or negative?" <br> "Determine the emotional tone of this text" |
-| **Text Summarization** | "Summarize this article" <br> "Create a brief summary of this text" <br> "Condense this content" |
-| **Multi-step Processing** | "Clean this text and then analyze its sentiment" <br> "Summarize this text after cleaning it" |
-| **Parameterized Requests** | "Summarize this text to 3 sentences" <br> "Give me a 2-sentence summary" |
+# Enable parallel execution
+python orchestrator/orchestrator.py --request "Clean this text" --input-text "Text to clean" --parallel
+```
+
+## 📊 Supported Services
+
+The AI Orchestrator currently supports the following containerized services:
+
+| Service | Description | Example Command |
+|---------|-------------|----------------|
+| **Text Summarization** | Extracts key sentences to create concise summaries | "Summarize this article" |
+| **Data Cleaning** | Normalizes text by removing special characters and standardizing format | "Clean this dataset" |
+| **Sentiment Analysis** | Analyzes emotional tone with positive/negative scoring | "What's the sentiment of this review?" |
+
+## 🧪 Examples
+
+### Data Cleaning
+
+```bash
+python orchestrator/orchestrator.py --request "Clean this text" --input-file messy_text.txt --output-file cleaned_text.txt
+```
+
+Input:
+
+```
+THIS is a SAMPLE text with LOTS of CAPITALS!!!
+  It also has   extra   spaces,  and @#$%&* special characters.
+```
+
+Output:
+
+```
+this is a sample text with lots of capitals it also has extra spaces and special characters
+```
+
+### Sentiment Analysis
+
+```bash
+python orchestrator/orchestrator.py --request "Is this review positive?" --input-text "This product is amazing! I love it."
+```
+
+Output:
+
+```json
+{
+  "score": 0.845,
+  "positive_words": 2,
+  "negative_words": 0,
+  "classification": "positive"
+}
+```
+
+### Text Summarization with Parameters
+
+```bash
+python orchestrator/orchestrator.py --request "Summarize this article to 3 sentences" --input-file long_article.txt
+```
+
+## 🏗️ Architecture
+
+The system consists of three main components:
+
+1. **Orchestrator Engine**: Core logic that processes requests, makes decisions, and manages container lifecycle
+2. **LLM Integration**: Connects to Groq's API for natural language understanding and decision making
+3. **Container Services**: Independent microservices that perform specific data processing tasks
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  User Request   │────▶│   Orchestrator  │────▶│  LLM Decision   │
+└─────────────────┘     │     Engine      │◀────│     Engine      │
+                        └────────┬────────┘     └─────────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │  Container      │
+                        │  Execution      │
+                        └────────┬────────┘
+                                 │
+                        ┌────────┴────────┐
+                        ▼                 ▼
+            ┌─────────────────┐  ┌─────────────────┐
+            │ Data Processing │  │ Result          │
+            │ Containers      │  │ Formatting      │
+            └─────────────────┘  └─────────────────┘
+```
 
 ## 🧪 Testing
 
-The project includes a comprehensive test suite to ensure reliable operation.
+Run the comprehensive test suite to verify all system components:
 
 ```bash
-# Run the full test suite
 python tests/run_tests.py
-
-# Run specific component tests
-python -m unittest tests/test_containers.py
-python -m unittest tests/test_llm_integration.py
-python -m unittest tests/test_orchestrator.py
 ```
 
-## 🔧 Troubleshooting
+Individual component tests can be run as follows:
+
+```bash
+python -m unittest tests/test_orchestrator.py
+python -m unittest tests/test_containers.py
+python -m unittest tests/test_llm_integration.py
+```
+
+## ⚠️ Troubleshooting
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| **Container Build Failures** | Ensure Docker is running and you have sufficient permissions |
-| **LLM API Errors** | Verify your Groq API key is valid and properly set in the `.env` file |
-| **Missing Dependencies** | Run `pip install -r requirements.txt` to install required packages |
-| **File Mounting Issues** | Check Docker installation and permissions for volumes |
-| **Groq Client Errors** | If you see "proxies" errors, update with `pip install groq==0.4.1` |
+- **Container Build Failures**: Ensure Docker is running and you have sufficient permissions
+- **LLM API Errors**: Verify your Groq API key is valid and properly set in the `.env` file
+- **Missing Dependencies**: Run `pip install -r requirements.txt` to install required packages
+- **File Mounting Issues**: For Docker-related errors, check your Docker installation and permissions
+- **Groq Client Errors**: If you see "proxies" errors, update the groq package with `pip install groq==0.4.1`
 
 ### Debug Mode
 
-For more detailed insights during development:
+For more detailed logging:
 
 ```bash
 export LOG_LEVEL=DEBUG
 python orchestrator/orchestrator.py --request "Your request" --input-text "Your text"
 ```
 
-### Advanced Debugging
-
-For introspecting the orchestration flow:
-
-```bash
-python debug_orchestrator.py --request "Your request" --input-file your_file.txt
-```
-
 ## 🛠️ Extending the System
 
-### Adding New Container Services
+### Adding New Containers
 
-1. **Create a container directory:**
+To create a new container:
 
-   ```bash
-   mkdir -p containers/new_service
-   ```
-
-2. **Implement the processing script:**
+1. **Create a directory** in `containers/` (e.g., `containers/new_service/`)
+2. **Implement your processing script** with standard input/output handling:
 
    ```python
-   #!/usr/bin/env python3
-   import sys
-
-   def your_processing_function(data):
-       # Your custom processing logic here
-       return processed_data
-
    if __name__ == "__main__":
-       # Standard input handling
+       # Read from stdin or file
        if len(sys.argv) > 1:
            with open(sys.argv[1], 'r') as f:
                data = f.read()
@@ -283,7 +278,7 @@ python debug_orchestrator.py --request "Your request" --input-file your_file.txt
        # Process data
        result = your_processing_function(data)
 
-       # Standard output handling
+       # Output to file or stdout
        if len(sys.argv) > 2:
            with open(sys.argv[2], 'w') as f:
                f.write(result)
@@ -291,50 +286,32 @@ python debug_orchestrator.py --request "Your request" --input-file your_file.txt
            print(result)
    ```
 
-3. **Create a Dockerfile:**
-
-   ```dockerfile
-   FROM python:3.9-slim
-   WORKDIR /app
-   COPY your_script.py /app/
-   RUN chmod +x /app/your_script.py
-   ENTRYPOINT ["python", "your_script.py"]
-   CMD []
-   ```
-
-4. **Build the container:**
-
-   ```bash
-   docker build -t ai-orchestrator/new-service containers/new_service/
-   ```
-
-5. **Register the container:**
-   Update the `available_containers` dictionary in `orchestrator/llm_integration.py`:
-
-   ```python
-   self.available_containers = {
-       # Existing containers...
-       "new-service": "Description of what your new service does",
-   }
-   ```
-
-## 📈 Performance Considerations
-
-- **Parallel Execution:** Use the `--parallel` flag for increased throughput when processing multiple independent tasks
-- **Container Optimization:** Minimize image size by using slim base images and multi-stage builds
-- **Resource Allocation:** Set Docker resource limits for containers in production environments
-- **Caching:** Consider implementing a cache for frequent LLM API calls to reduce latency and costs
-
-## 📜 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+3. **Create a Dockerfile**
+4. **Build the container**: `docker build -t ai-orchestrator/new-service containers/new_service/`
+5. **Register the container** in `orchestrator/llm_integration.py`
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Here's how you can help improve the AI Orchestrator:
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📞 Contact & Support
+
+For questions or issues, please open an issue on GitHub or contact the project maintainers.
+
+---
+
+<div align="center">
+
+**Made with ❤️ by Tariq Omer**
+
+</div>
