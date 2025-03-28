@@ -57,6 +57,12 @@ def clean_data(text):
 
     text = '\n'.join(lines)
 
+    text = text.lower()  # Convert text to lowercase for consistency
+
+    # Capitalize the first character if the text is not empty
+    if text:
+        text = text[0].upper() + text[1:]
+
     return text
 
 if __name__ == "__main__":
