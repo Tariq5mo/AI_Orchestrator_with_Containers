@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AI Orchestrator with Containers</title>
+	<style>
+		body {
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			color: #333;
+			line-height: 1.6;
+		}
+
+		h1,
+		h2,
+		h3 {
+			color: #2c3e50;
+		}
+
+		.card {
+			background-color: #fff;
+			border-radius: 8px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		textarea,
+		input[type="text"] {
+			width: 100%;
+			padding: 12px;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			box-sizing: border-box;
+			margin-bottom: 15px;
+			font-size: 14px;
+		}
+
+		button {
+			background-color: #3498db;
+			color: white;
+			border: none;
+			padding: 12px 20px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		button:hover {
+			background-color: #2980b9;
+		}
+
+		#results {
+			display: none;
+			margin-top: 20px;
+		}
+
+		.container-badge {
+			display: inline-block;
+			background-color: #f1f1f1;
+			padding: 5px 10px;
+			border-radius: 12px;
+			margin-right: 8px;
+			font-size: 14px;
+		}
+
+		.container-flow {
+			margin: 15px 0;
+		}
+
+		.container-flow .arrow {
+			margin: 0 8px;
+		}
+
+		pre {
+			background-color: #f8f9fa;
+			padding: 15px;
+			border-radius: 4px;
+			overflow: auto;
+			max-height: 300px;
+		}
+
+		.loading {
+			display: none;
+			text-align: center;
+			padding: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>AI Orchestrator with Containers</h1>
+
+	<div class="card">
+		<h2>Submit Your Request</h2>
+		<form id="requestForm">
+			<div>
+				<label for="request">What do you want to do?</label>
+				<input type="text" id="request" name="request"
+					placeholder="e.g., Clean this text and analyze its sentiment" required>
+			</div>
+			<div>
+				<label for="text">Input Text:</label>
+				<textarea id="text" name="text" rows="6" placeholder="Enter your text here..." required></textarea>
+			</div>
+			<button type="submit">Process Request</button>
+		</form>
+	</div>
+
+	<div id="loading" class="loading">
+		<p>Processing your request...</p>
+	</div>
+
+	<div id="results" class="card">
+		<h2>Results</h2>
+		<div id="container-flow" class="container-flow"></div>
+		<h3>Final Output</h3>
+		<pre id="final-output"></pre>
+		<h3>Processing Details</h3>
+		<div id="details"></div>
+	</div>
+
+	<script>
+		document.getElementById('requestForm').addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			const request = document.getElementById('request').value;
+			const text = document.getElementById('text').value;
+
+			document.getElementById('loading').style.display = 'block';
+			document.getElementById('results').style.display = 'none';
+
+			try {
+				const response = await fetch('/process', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						request: request,
+						text: text
+					})
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+					// Show container flow
+					const flowDiv = document.getElementById('container-flow');
+					flowDiv.innerHTML = data.execution_plan.map((c, i) =>
+						`<span class="container-badge">${c}</span>${i < data.execution_plan.length - 1 ? '<span class="arrow">→</span>' : ''}`
+					).join('');
+
+					// Show final output
+					document.getElementById('final-output').textContent = data.output;
+
+					// Show details for each container
+					const detailsDiv = document.getElementById('details');
+					detailsDiv.innerHTML = data.results.map(result => `
+                        <h4>${result.container} ${result.status === 'success' ? '✓' : '✗'}</h4>
+                        <pre>${result.output_preview || result.error || 'No output'}</pre>
+                    `).join('');
+
+					document.getElementById('results').style.display = 'block';
+				} else {
+					alert(`Error: ${data.error}`);
+				}
+			} catch (error) {
+				alert('An error occurred while processing your request.');
+				console.error(error);
+			} finally {
+				document.getElementById('loading').style.display = 'none';
+			}
+		});
+	</script>
+</body>
+
+</html>
