@@ -1,0 +1,5 @@
+THIS is a SAMPLE text with LOTS of CAPITALS!!!
+  It also has   extra   spaces,  and @#$%&* special characters.
+Line breaks
+   are  also
+not consistent...
